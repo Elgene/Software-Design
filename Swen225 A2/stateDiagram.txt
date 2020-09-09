@@ -1,0 +1,45 @@
+class StateDiagram {
+  
+  StateDiagram {
+    
+    CluedoGame{
+      
+      restartGame -> Start;
+      
+      PlayerTurn {
+        
+        Move{
+          [anyWhere()] move -> EndTurn;
+          [inRoom() || teleported()]suggest -> Suggest;
+          [anyWhere()]accuse  -> Accuse;
+        }
+        
+        EndTurn {
+          [hasPlayerMoved()]nextPlayerTurn -> CluedoGame;
+        }
+        
+        Suggest{
+          [hasPlayerMoved()]nextPlayerTurn -> CluedoGame;
+        }
+        
+        Accuse {
+          [hasPlayerWon() || noPlayers()]endGame -> End;
+        }
+      }
+      
+      Start{
+        startGame -> PlayerTurn;
+      }
+      
+      End{
+        playAgain -> Start;
+        quit -> Quit;
+      }
+    }
+  }
+}
+
+
+class CluedoGame{
+  position 50 30 109 45;
+}
